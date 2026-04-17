@@ -104,8 +104,13 @@ while true; do
 
 	if ! curl -JOm 90 http://10.42.42.42/backup; then
 		echo "Could not fetch a complete backup"
-		read -p "Do you want to continue anyway? [y/N] " -n 1 -r
-		echo
+		if [[ -n "${AUTO_CONTINUE_ON_PARTIAL_BACKUP:-}" ]]; then
+			REPLY="${AUTO_CONTINUE_ON_PARTIAL_BACKUP}"
+			echo "(AUTO_CONTINUE_ON_PARTIAL_BACKUP=$REPLY)"
+		else
+			read -p "Do you want to continue anyway? [y/N] " -n 1 -r
+			echo
+		fi
 		[[ "$REPLY" =~ ^[Yy]$ ]] || break
 		sleep 2
 	fi
@@ -130,7 +135,12 @@ while true; do
 	sudo mv *.log "$backupfolder/"
 
 	echo "======================================================"
-	read -p "Do you want to flash another device? [y/N] " -n 1 -r
-	echo
+	if [[ -n "${AUTO_FLASH_ANOTHER_DEVICE:-}" ]]; then
+		REPLY="${AUTO_FLASH_ANOTHER_DEVICE}"
+		echo "(AUTO_FLASH_ANOTHER_DEVICE=$REPLY)"
+	else
+		read -p "Do you want to flash another device? [y/N] " -n 1 -r
+		echo
+	fi
 	[[ "$REPLY" =~ ^[Yy]$ ]] || break
 done

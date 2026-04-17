@@ -116,3 +116,6 @@ data
 # flag files
 eula_accepted
 
+# Local-only clones / side repos (not part of this fork)
+drejo.com.4/
+
